@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useLanguage } from '../../context/LanguageContext'
 import { AnimatePresence, motion } from 'framer-motion'
 
 import FarmerDashboard from './Farmer dashboard.jsx'
@@ -16,6 +17,7 @@ const msp = [
 ]
 
 export default function FarmerPortal() {
+  const { t } = useLanguage()
   const [page, setPage] = useState('dashboard')
   const [booked, setBooked] = useState(false)
 
@@ -81,8 +83,6 @@ export default function FarmerPortal() {
         setCrop={setCrop}
         qty={qty}
         setQty={setQty}
-        quantityUnit={quantityUnit}
-        setQuantityUnit={setQuantityUnit}
         slot={slot}
         setSlot={setSlot}
         onBook={book}
@@ -111,7 +111,7 @@ export default function FarmerPortal() {
       <aside className="sidebar">
         <div className="side-heading">
           <span>AgriSync</span>
-          <small>Farmer Portal</small>
+          <small>{t('farmer')} Portal</small>
         </div>
 
         <div className="sidebar-nav">
@@ -128,8 +128,8 @@ export default function FarmerPortal() {
         </div>
 
         <div className="sidebar-note">
-          <strong>Need help?</strong>
-          <span>Call 1800-000-2026</span>
+          <strong>{t('needHelp')}</strong>
+          <span>{t('call')}</span>
         </div>
       </aside>
 

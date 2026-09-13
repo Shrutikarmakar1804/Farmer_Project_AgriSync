@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useLanguage } from '../../context/LanguageContext'
 import { AnimatePresence, motion } from 'framer-motion'
 
 import LiveQueue from './Live Queue.jsx'
@@ -18,6 +19,7 @@ const seed = [
 ]
 
 export default function MandiOperatorPortal() {
+  const { t } = useLanguage()
   const [page, setPage] = useState('queue')
 
   const [gross, setGross] = useState('7250')
@@ -50,13 +52,13 @@ export default function MandiOperatorPortal() {
    * Help for Government has been added as the 7th page.
    */
   const nav = [
-    ['queue', '▦', 'Live Queue'],
-    ['gate', '⌗', 'Gate Scan'],
-    ['quality', '✓', 'Quality Check'],
-    ['weighbridge', '⚖', 'Weighbridge'],
-    ['payments', '₹', 'Payments'],
-    ['analytics', '▥', 'Analytics'],
-    ['helpGovt', '?', 'Help for Government'],
+    ['queue', '▦', t('liveQueue')],
+    ['gate', '⌗', t('gate')],
+    ['quality', '✓', t('quality')],
+    ['weighbridge', '⚖', t('weighbridge')],
+    ['payments', '₹', t('payments')],
+    ['analytics', '▥', t('analytics')],
+    ['helpGovt', '?', t('helpGovt')],
   ]
 
   /*
@@ -140,7 +142,7 @@ export default function MandiOperatorPortal() {
       <aside className="sidebar">
 
         <div className="side-heading">
-          Mandi Operator
+          {t('operator')}
         </div>
 
         {nav.map(([id, icon, label]) => (
@@ -159,10 +161,8 @@ export default function MandiOperatorPortal() {
         ))}
 
         <div className="sidebar-note">
-          <strong>● System online</strong>
-          <span>
-            All mandi services active
-          </span>
+          <strong>● {t('systemOnline')}</strong>
+          <span>All mandi services active</span>
         </div>
 
       </aside>
