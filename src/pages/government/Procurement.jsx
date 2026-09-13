@@ -1,10 +1,3 @@
+import { motion } from 'framer-motion'
 import Card from './_Card'
-
-export default function Procurement({ procurement }) {
-  return (
-    <>
-      <div className="page-heading"><div><small>STATE PROCUREMENT</small><h1>Procurement Monitoring</h1><p>Track quantity and value procured by crop.</p></div></div>
-      <Card><div className="table-wrap"><table><thead><tr><th>Crop</th><th>Quantity</th><th>Procurement value</th><th>MSP compliance</th></tr></thead><tbody>{procurement.map(r => <tr key={r[0]}><td><b>{r[0]}</b></td><td>{r[1]}</td><td>{r[2]}</td><td><span className="pill success">{r[3]}</span></td></tr>)}</tbody></table></div></Card>
-    </>
-  )
-}
+export default function Procurement({procurement}){return <motion.div initial={{opacity:0}} animate={{opacity:1}}><div className="page-heading"><div><small>STATE PROCUREMENT</small><h1>Procurement Monitoring</h1><p>Track quantity, value and MSP compliance by crop.</p></div></div><Card><div className="table-wrap"><table><thead><tr><th>Crop</th><th>Quantity</th><th>Procurement value</th><th>MSP compliance</th></tr></thead><tbody>{procurement.map((r,i)=><motion.tr key={r[0]} initial={{opacity:0,x:-10}} animate={{opacity:1,x:0}} transition={{delay:i*.07}}><td><b>{r[0]}</b></td><td>{r[1]}</td><td>{r[2]}</td><td><span className="pill success">{r[3]}</span></td></motion.tr>)}</tbody></table></div></Card><div className="metric-grid" style={{marginTop:16}}>{[['4,030 q','Total quantity'],['₹118.16L','Total value'],['92%','Average compliance']].map(([v,l])=><div className="metric" key={l}><span>{l}</span><b>{v}</b></div>)}</div></motion.div>}

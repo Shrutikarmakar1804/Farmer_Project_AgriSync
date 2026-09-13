@@ -1,15 +1,4 @@
+import { motion } from 'framer-motion'
 import Card from './_Card'
-
-export default function Support() {
-  return (
-    <>
-      <div className="page-heading"><div><small>FARMER SUPPORT</small><h1>Support center</h1><p>Help for booking, queue tracking, procurement and payments.</p></div></div>
-      <div className="support-grid">
-        <Card><span className="support-icon">☎</span><h3>Helpline</h3><p>1800-000-2026</p></Card>
-        <Card><span className="support-icon">?</span><h3>Procurement help</h3><p>Get guidance about your slot and token.</p></Card>
-        <Card><span className="support-icon">₹</span><h3>Payment support</h3><p>Check payment and transaction status.</p></Card>
-        <Card><span className="support-icon">⌖</span><h3>Mandi location</h3><p>View your assigned procurement center.</p></Card>
-      </div>
-    </>
-  )
-}
+const items=[['☎','Farmer Helpline','1800-000-2026','Talk to procurement support'],['?','Slot Assistance','Help with booking or rescheduling','Guidance available'],['✓','Payment Support','Resolve payment-status questions','Transaction assistance']]
+export default function Support(){return <motion.div initial={{opacity:0}} animate={{opacity:1}}><div className="page-heading"><div><small>HELP CENTER</small><h1>Farmer Support</h1><p>Get help with slots, queue status, quality, payments and procurement.</p></div></div><div className="support-grid">{items.map(([icon,title,main,sub],i)=><motion.div key={title} initial={{opacity:0,y:18}} animate={{opacity:1,y:0}} transition={{delay:i*.08}}><Card><span className="support-icon">{icon}</span><h3 style={{marginTop:14}}>{title}</h3><strong>{main}</strong><p>{sub}</p><button className="secondary small">Get assistance →</button></Card></motion.div>)}</div></motion.div>}

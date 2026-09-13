@@ -1,12 +1,4 @@
+import { motion } from 'framer-motion'
 import Card from './_Card'
-
-const msp = [['Wheat','₹2,585 / q'],['Paddy','₹2,369 / q'],['Mustard','₹6,200 / q'],['Maize','₹2,400 / q']]
-
-export default function MSPMonitoring() {
-  return (
-    <>
-      <div className="page-heading"><div><small>MSP COMPLIANCE</small><h1>MSP Monitoring</h1><p>Ensure procurement centers are operating against approved MSP reference prices.</p></div></div>
-      <div className="msp-grid">{msp.map(r => <Card key={r[0]}><span className="crop-emoji">₹</span><h3>{r[0]}</h3><strong className="msp-price">{r[1]}</strong><span className="pill success">Compliant</span></Card>)}</div>
-    </>
-  )
-}
+const msp=[['Wheat','₹2,585 / q'],['Paddy','₹2,369 / q'],['Mustard','₹6,200 / q'],['Maize','₹2,400 / q']]
+export default function MSPMonitoring(){return <motion.div initial={{opacity:0}} animate={{opacity:1}}><div className="page-heading"><div><small>MSP COMPLIANCE</small><h1>MSP Monitoring</h1><p>Check whether procurement centers are operating against approved reference prices.</p></div><span className="pill success">92% network compliance</span></div><div className="msp-grid">{msp.map(([crop,price],i)=><motion.div key={crop} initial={{opacity:0,y:18}} animate={{opacity:1,y:0}} transition={{delay:i*.08}}><Card><span className="crop-emoji">₹</span><h3 style={{marginTop:14}}>{crop}</h3><strong className="msp-price">{price}</strong><span className="pill success">Compliant</span><p>Reference price available to monitored procurement centers.</p></Card></motion.div>)}</div></motion.div>}

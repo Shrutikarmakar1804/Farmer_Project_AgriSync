@@ -1,15 +1,4 @@
+import { motion } from 'framer-motion'
 import Card from './_Card'
-
-const history = [
-  ['TK-1074', 'Paddy', '40 q', '08 Sep 2026', '₹94,760'],
-  ['TK-1058', 'Wheat', '32 q', '26 Aug 2026', '₹82,720'],
-]
-
-export default function History() {
-  return (
-    <>
-      <div className="page-heading"><div><small>YOUR RECORDS</small><h1>Procurement history</h1><p>Completed transactions and payment records.</p></div></div>
-      <Card>{history.map(row => <div className="history-row" key={row[0]}><span className="history-icon">✓</span><div><b>{row[0]} · {row[1]}</b><small>{row[2]} · {row[3]}</small></div><strong>{row[4]}</strong></div>)}</Card>
-    </>
-  )
-}
+const rows=[['14 Aug 2026','Wheat','24.5 q','₹63,333','Paid'],['29 Jul 2026','Paddy','31.0 q','₹73,439','Paid'],['12 Jul 2026','Mustard','18.0 q','₹111,600','Paid'],['21 Jun 2026','Wheat','20.0 q','₹51,700','Paid']]
+export default function History(){return <motion.div initial={{opacity:0}} animate={{opacity:1}}><div className="page-heading"><div><small>TRANSACTION RECORDS</small><h1>Procurement History</h1><p>Review your previous mandi transactions and payment outcomes.</p></div></div><Card><div className="history-list">{rows.map((r,i)=><motion.div className="history-item" key={r[0]} initial={{opacity:0,x:-15}} animate={{opacity:1,x:0}} transition={{delay:i*.08}}><div><b>{r[1]} • {r[2]}</b><span>{r[0]} · Kolkata Central Mandi</span></div><div style={{textAlign:'right'}}><b>{r[3]}</b><span className="pill success">{r[4]}</span></div></motion.div>)}</div></Card></motion.div>}

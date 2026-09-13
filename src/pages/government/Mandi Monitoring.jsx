@@ -1,10 +1,3 @@
+import { motion } from 'framer-motion'
 import Card from './_Card'
-
-export default function MandiMonitoring({ mandis }) {
-  return (
-    <>
-      <div className="page-heading"><div><small>REAL-TIME MANDI MONITORING</small><h1>Mandi Monitoring</h1><p>Compare waiting time, utilization and operational status.</p></div></div>
-      <div className="msp-grid">{mandis.map(m => <Card key={m[0]}><span className="crop-emoji">⌖</span><h3>{m[0]}</h3><small>{m[1]}</small><strong className="msp-price">{m[3]}</strong><small>Average waiting time</small><span className={`pill ${m[4] === 'Attention' ? 'checking' : 'success'}`}>{m[4]}</span></Card>)}</div>
-    </>
-  )
-}
+export default function MandiMonitoring({mandis}){return <motion.div initial={{opacity:0}} animate={{opacity:1}}><div className="page-heading"><div><small>REAL-TIME NETWORK</small><h1>Mandi Monitoring</h1><p>Compare utilization, waiting time and operating status.</p></div><span className="pill success">4 centers online</span></div><div className="msp-grid">{mandis.map((m,i)=><motion.div key={m[0]} initial={{opacity:0,y:16}} animate={{opacity:1,y:0}} transition={{delay:i*.08}}><Card><span className="crop-emoji">⌖</span><h3 style={{marginTop:14}}>{m[0]}</h3><small>{m[1]}</small><strong className="msp-price">{m[3]}</strong><small>Average waiting time</small><div className="mini-progress" style={{margin:'12px 0'}}><span style={{width:m[2]}}/></div><span className={`pill ${m[4]==='Attention'?'checking':'success'}`}>{m[4]}</span></Card></motion.div>)}</div></motion.div>}

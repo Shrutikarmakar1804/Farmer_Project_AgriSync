@@ -1,11 +1,3 @@
+import { motion } from 'framer-motion'
 import Card from './_Card'
-
-export default function Analytics() {
-  return (
-    <>
-      <div className="page-heading"><div><small>MANDI ANALYTICS</small><h1>Procurement Analytics</h1><p>Operational view of throughput and waiting time.</p></div></div>
-      <div className="operator-stats"><div><b>312 q</b><span>Total produce</span></div><div><b>94%</b><span>On-time processing</span></div><div><b>18 min</b><span>Average wait</span></div><div><b>₹8.4L</b><span>Total value</span></div></div>
-      <Card><h3>Hourly throughput</h3><div className="bar-chart tall">{[25,38,42,55,70,82,90,74,62,50,35,20].map((h, i) => <span key={i} style={{ height: `${h}%` }}><i /></span>)}</div></Card>
-    </>
-  )
-}
+export default function Analytics(){return <motion.div initial={{opacity:0}} animate={{opacity:1}}><div className="page-heading"><div><small>PERFORMANCE INTELLIGENCE</small><h1>Mandi Analytics</h1><p>Understand throughput, waiting time and procurement value.</p></div><span className="pill success">Today</span></div><div className="operator-stats">{[['312 q','Total produce'],['94%','On-time processing'],['18 min','Average wait'],['₹8.4L','Total value']].map(([v,l],i)=><motion.div key={l} initial={{opacity:0,y:14}} animate={{opacity:1,y:0}} transition={{delay:i*.07}}><b>{v}</b><span>{l}</span></motion.div>)}</div><Card><h3>Hourly throughput</h3><p>Relative produce handled by hour.</p><div className="bar-chart tall">{[25,38,42,55,70,82,90,74,62,50,35,20].map((h,i)=><motion.span key={i} style={{height:`${h}%`}} initial={{scaleY:0}} animate={{scaleY:1}} transition={{delay:i*.05}}><i/></motion.span>)}</div></Card></motion.div>}

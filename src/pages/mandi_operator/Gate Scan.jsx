@@ -1,13 +1,3 @@
+import { motion } from 'framer-motion'
 import Card from './_Card'
-
-export default function GateScan({ onProceed }) {
-  return (
-    <>
-      <div className="page-heading"><div><small>GATE VERIFICATION</small><h1>QR Gate Verification</h1><p>Verify the farmer token before sending it to quality check.</p></div></div>
-      <div className="gate-grid">
-        <Card className="scan-card"><div className="qr-large">{Array.from({ length: 49 }).map((_, i) => <i key={i} className={i % 4 !== 1 ? 'filled' : ''}/>)}</div><p>Scan farmer token QR code</p></Card>
-        <Card><span className="eyebrow">SCANNED TOKEN</span><h2>TK-1082</h2><div className="farmer-detail"><b>R. Kumar</b><span>Wheat · 50 quintals</span><span>Vehicle: WB-02-X-4321</span></div><button className="primary" onClick={onProceed}>Verify & Proceed</button></Card>
-      </div>
-    </>
-  )
-}
+export default function GateScan({onProceed}){return <motion.div initial={{opacity:0,x:18}} animate={{opacity:1,x:0}}><div className="page-heading"><div><small>GATE VERIFICATION</small><h1>QR Gate Scan</h1><p>Verify the farmer token before quality assessment.</p></div><span className="pill success">Scanner ready</span></div><div className="gate-grid"><Card className="scan-card"><motion.div className="qr-large" animate={{boxShadow:['0 0 0 #77b55a00','0 0 0 8px #77b55a18','0 0 0 #77b55a00']}} transition={{repeat:Infinity,duration:2}}>{Array.from({length:49}).map((_,i)=><i key={i} className={i%4!==1?'filled':''}/>)}</motion.div><p>Point the gate scanner at the farmer token QR.</p></Card><Card><span className="eyebrow">SCANNED TOKEN</span><h2 style={{fontFamily:'Space Grotesk',fontSize:32,margin:'8px 0'}}>TK-1082</h2><div className="farmer-detail"><b>R. Kumar</b><span>Wheat · 50 quintals</span><span>Vehicle: WB-02-X-4321</span></div><button className="primary" onClick={onProceed}>Verify & Proceed →</button></Card></div></motion.div>}

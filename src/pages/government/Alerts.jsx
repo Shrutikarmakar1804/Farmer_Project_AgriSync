@@ -1,13 +1,3 @@
+import { motion } from 'framer-motion'
 import Card from './_Card'
-
-export default function Alerts({ onToast }) {
-  return (
-    <>
-      <div className="page-heading"><div><small>ALERT CENTER</small><h1>Operational Alerts</h1><p>Prioritize mandi centers where farmer waiting time or capacity needs attention.</p></div></div>
-      <div className="alert-list">
-        <Card><span className="alert-icon">⚠</span><div><b>Siliguri Mandi has a 31-minute average wait.</b><p>Capacity utilization is high. Review queue allocation.</p></div><button className="secondary small" onClick={() => onToast('Alert assigned to mandi officer')}>Assign</button></Card>
-        <Card><span className="alert-icon">⚠</span><div><b>Durgapur Mandi is at 93% utilization.</b><p>Monitor incoming slots for the next two hours.</p></div><button className="secondary small" onClick={() => onToast('Alert acknowledged')}>Acknowledge</button></Card>
-      </div>
-    </>
-  )
-}
+export default function Alerts({onToast}){const alerts=[['Siliguri Mandi has a 31-minute average wait.','Capacity utilization is high. Review queue allocation.','Assign'],['Durgapur Mandi is at 93% utilization.','Monitor incoming slots for the next two hours.','Acknowledge'],['One procurement center needs MSP review.','Compare current offer rates with the approved reference.','Review']];return <motion.div initial={{opacity:0}} animate={{opacity:1}}><div className="page-heading"><div><small>ATTENTION CENTER</small><h1>Operational Alerts</h1><p>Prioritize mandi centers where waiting time, capacity or MSP compliance needs attention.</p></div><span className="pill checking">3 active</span></div><div className="alert-list">{alerts.map(([title,desc,action],i)=><motion.div key={title} initial={{opacity:0,x:20}} animate={{opacity:1,x:0}} transition={{delay:i*.09}}><Card><span className="alert-icon">⚠</span><div><b>{title}</b><p>{desc}</p></div><button className="secondary small" onClick={()=>onToast(`${action} action completed`)}>{action}</button></Card></motion.div>)}</div></motion.div>}

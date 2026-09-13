@@ -1,17 +1,4 @@
+import { motion } from 'framer-motion'
 import Card from './_Card'
-
-const msp = [
-  ['Wheat', '₹2,585 / q'],
-  ['Paddy (Common)', '₹2,369 / q'],
-  ['Mustard', '₹6,200 / q'],
-  ['Maize', '₹2,400 / q'],
-]
-
-export default function MSPPrices() {
-  return (
-    <>
-      <div className="page-heading"><div><small>PRICE INFORMATION</small><h1>MSP prices</h1><p>Reference prices to help farmers understand procurement rates.</p></div></div>
-      <div className="msp-grid">{msp.map(([name, price]) => <Card key={name}><span className="crop-emoji">🌾</span><h3>{name}</h3><strong className="msp-price">{price}</strong><small>Current reference MSP</small></Card>)}</div>
-    </>
-  )
-}
+const prices=[['Wheat','₹2,585 / q','Stable'],['Paddy (Common)','₹2,369 / q','Reference'],['Mustard','₹6,200 / q','Reference'],['Maize','₹2,400 / q','Stable']]
+export default function MSPPrices(){return <motion.div initial={{opacity:0}} animate={{opacity:1}}><div className="page-heading"><div><small>PRICE TRANSPARENCY</small><h1>MSP Prices</h1><p>Reference minimum support prices for procurement planning.</p></div><span className="pill success">Official reference</span></div><div className="msp-grid">{prices.map(([crop,price,status],i)=><motion.div key={crop} initial={{opacity:0,y:18}} animate={{opacity:1,y:0}} transition={{delay:i*.08}}><Card><span className="crop-emoji">₹</span><h3 style={{marginTop:15}}>{crop}</h3><strong className="msp-price">{price}</strong><span className="pill success">{status}</span><p>Use this reference to compare the offered procurement rate.</p></Card></motion.div>)}</div></motion.div>}
