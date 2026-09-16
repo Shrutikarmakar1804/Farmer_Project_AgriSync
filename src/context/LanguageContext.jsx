@@ -1,6 +1,8 @@
 import { createContext, useContext, useState } from 'react'
+// 
 
-const LanguageContext = createContext(null)
+export const LanguageContext = createContext(null)
+// const LanguageContext = createContext(null)
 
 const dictionaries = {
   en: {
