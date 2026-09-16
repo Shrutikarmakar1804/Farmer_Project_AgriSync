@@ -1,7 +1,8 @@
 import React, { useState, useContext } from 'react';
 import { LanguageContext } from '../context/LanguageContext';
 import LanguageSelector from '../components/LanguageSelector';
-import heroBg from '../assets/hero.png'; 
+import heroBg from '../assets/hero.png';
+import { apiLogin, apiSignupFarmer, saveSession } from '../api/client'; 
 
 const Auth = ({ onAuthSuccess }) => {
   const langContext = useContext(LanguageContext);
@@ -38,6 +39,7 @@ const Auth = ({ onAuthSuccess }) => {
     adminMfa: '',
   });
   const [errors, setErrors] = useState({});
+  const [submitting, setSubmitting] = useState(false);
 
   const t = {
     en: {
@@ -257,13 +259,32 @@ const Auth = ({ onAuthSuccess }) => {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (validateForm()) {
-      // TODO: Connect real backend authentication API here
-      console.log('Mock submission valid for role:', role);
-      console.log('Data:', formData);
-      onAuthSuccess(role);
+    if (!validateForm() || submitting) return;
+
+    setSubmitting(true);
+    try {
+      let result;
+      if (role === 'Farmer' && farmerTab === 'signup') {
+        result = await apiSignupFarmer({
+          name: formData.fullName,
+          phone: formData.mobile,
+          district: formData.district,
+          mandi: 'Smart Mandi',
+        });
+      } else {
+        const identifier = role === 'Farmer' ? formData.identifier : role === 'Mandi Operator' ? (mandiTab === 'otp' ? formData.mandiMobile : formData.mandiId) : formData.adminId;
+        result = await apiLogin(identifier);
+      }
+
+      saveSession({ accessToken: result.accessToken, user: result.user });
+      setErrors({});
+      onAuthSuccess(role, result);
+    } catch (error) {
+      setErrors((prev) => ({ ...prev, submit: error.message || 'Unable to connect to the AGRISync server.' }));
+    } finally {
+      setSubmitting(false);
     }
   };
 
@@ -348,6 +369,7 @@ const Auth = ({ onAuthSuccess }) => {
             </div>
 
             <form onSubmit={handleSubmit} className="space-y-6">
+                      {errors.submit && <div className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm font-semibold text-red-700">{errors.submit}</div>}
               
               {/* FARMER FLOW */}
               {role === 'Farmer' && (
@@ -420,7 +442,7 @@ const Auth = ({ onAuthSuccess }) => {
                       </div>
 
                       <button type="submit" className="w-full flex items-center justify-center gap-2 py-3.5 px-4 border border-transparent rounded-xl shadow-md text-sm font-bold text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition-all mt-2">
-                        {texts.signIn}
+                        {submitting ? 'Connecting...' : texts.signIn}
                         <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14 5l7 7m0 0l-7 7m7-7H3" /></svg>
                       </button>
 
@@ -492,7 +514,7 @@ const Auth = ({ onAuthSuccess }) => {
                       </p>
 
                       <button type="submit" className="w-full flex items-center justify-center py-3.5 px-4 border border-transparent rounded-xl shadow-md text-sm font-bold text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition-all mt-6">
-                        {texts.createAccount}
+                        {submitting ? 'Creating...' : texts.createAccount}
                       </button>
                       
                       <div className="text-center mt-4">

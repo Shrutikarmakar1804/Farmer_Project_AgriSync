@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { apiBookSlot } from '../../api/client'
 import { motion } from 'framer-motion'
 import Card from './_Card'
 
@@ -92,6 +93,8 @@ export default function BookSlot({
 
   const [procurementDate, setProcurementDate] =
     useState('2026-09-14')
+  const [bookingLoading, setBookingLoading] = useState(false)
+  const [bookingError, setBookingError] = useState('')
 
   const slots = [
     '09:30 AM',
@@ -126,20 +129,27 @@ export default function BookSlot({
     Boolean(slot) &&
     Boolean(procurementDate)
 
-  const handleBooking = () => {
-    if (!canConfirm) {
-      alert(
-        'Please enter your estimated quantity and select an arrival time before confirming.'
-      )
+  const handleBooking = async () => {
+    if (!canConfirm || bookingLoading) {
+      if (!canConfirm) alert('Please enter your estimated quantity and select an arrival time before confirming.')
       return
     }
 
-    /*
-      Keep your existing booking callback working.
-      The existing parent still receives the booking event.
-    */
-    if (onBook) {
-      onBook()
+    setBookingLoading(true)
+    setBookingError('')
+    try {
+      const result = await apiBookSlot({
+        cropType: crop,
+        quantity: Number(qty),
+        quantityUnit: selectedUnit,
+        date: procurementDate,
+        slotTime: slot,
+      })
+      onBook?.(result.token)
+    } catch (error) {
+      setBookingError(error.message || 'Unable to book the slot. Please check the backend connection.')
+    } finally {
+      setBookingLoading(false)
     }
   }
 
@@ -817,8 +827,10 @@ export default function BookSlot({
                     'background .2s ease',
                 }}
               >
-                {canConfirm
-                  ? 'Confirm & Generate Token'
+                {bookingLoading
+                  ? 'Booking...'
+                  : canConfirm
+                    ? 'Confirm & Generate Token'
                   : 'Complete Details First'}
 
                 <Icon name="arrow" size={17} />

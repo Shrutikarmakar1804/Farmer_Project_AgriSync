@@ -20,6 +20,7 @@ export default function FarmerPortal() {
   const { t } = useLanguage()
   const [page, setPage] = useState('dashboard')
   const [booked, setBooked] = useState(false)
+  const [activeToken, setActiveToken] = useState(null)
 
   const [crop, setCrop] = useState('Wheat')
   const [qty, setQty] = useState('25')
@@ -28,9 +29,9 @@ export default function FarmerPortal() {
 
   const [toast, setToast] = useState('')
 
-  const token = booked ? 'TK-1086' : 'TK-1082'
-  const ahead = booked ? 4 : 3
-  const wait = booked ? 34 : 18
+  const token = activeToken?.id || (booked ? 'TK-1086' : 'TK-1082')
+  const ahead = activeToken?.farmersAhead ?? (booked ? 4 : 3)
+  const wait = activeToken?.estimatedWaitMinutes ?? (booked ? 34 : 18)
 
   const notify = message => {
     setToast(message)
@@ -40,8 +41,9 @@ export default function FarmerPortal() {
     }, 2400)
   }
 
-  const book = () => {
+  const book = (serverToken) => {
     setBooked(true)
+    if (serverToken) setActiveToken(serverToken)
 
     const unitNames = {
       kg: 'kg',

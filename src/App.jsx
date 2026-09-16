@@ -2,15 +2,20 @@ import { useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import './App.css'
 import Auth from './pages/Auth.jsx' // Added Auth import
-import FarmerPortal from './pages/farmer/FarmerPortal.jsx'
-import MandiOperatorPortal from './pages/mandi_operator/MandiOperatorPortal.jsx'
-import GovernmentPortal from './pages/government/GovernmentPortal.jsx'
+import FarmerRouter from './router/farmer/FarmerRouter.jsx'
+import MandiOperatorRouter from './router/mandi-operator/MandiOperatorRouter.jsx'
+import GovernmentRouter from './router/government/GovernmentRouter.jsx'
 import { LanguageProvider, useLanguage } from './context/LanguageContext'
 import LanguageSelector from './components/LanguageSelector'
+import { getSession } from './api/client'
 
 function AppContent() {
-  const [isAuthenticated, setIsAuthenticated] = useState(false) // Added auth state
-  const [role, setRole] = useState('farmer')
+  const [session] = useState(() => getSession())
+  const [isAuthenticated, setIsAuthenticated] = useState(() => Boolean(session.token && session.user))
+  const [role, setRole] = useState(() => {
+    const savedRole = session.user?.role
+    return savedRole === 'OPERATOR' ? 'operator' : savedRole === 'ADMIN' ? 'government' : 'farmer'
+  })
   const { t } = useLanguage()
 
   // Added handler to map Auth.jsx roles to your existing App.jsx roles
@@ -46,12 +51,12 @@ function AppContent() {
         </div>
         <div className="top-actions">
           {(role === 'farmer' || role === 'operator') && <LanguageSelector />}
-          <div className="top-profile"><span className="online-dot" />{role === 'farmer' ? 'R. Kumar' : role === 'operator' ? 'Operator' : 'Department Officer'}</div>
+          <div className="top-profile"><span className="online-dot" />{session.user?.name || (role === 'farmer' ? 'R. Kumar' : role === 'operator' ? 'Operator' : 'Department Officer')}</div>
         </div>
       </header>
       <AnimatePresence mode="wait">
         <motion.div key={role} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: .22 }}>
-          {role === 'farmer' ? <FarmerPortal /> : role === 'operator' ? <MandiOperatorPortal /> : <GovernmentPortal />}
+          {role === 'farmer' ? <FarmerRouter /> : role === 'operator' ? <MandiOperatorRouter /> : <GovernmentRouter />}
         </motion.div>
       </AnimatePresence>
     </div>
